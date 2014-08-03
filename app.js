@@ -1,7 +1,13 @@
 angular.module('YouTubeApp',[])
-.directive('youtube'), function($window){
+.directive('youtube', function($window){
 	return{
 		restrict: 'E', // Element directive
+
+		scope: {
+			height: '@',
+			width: '@',
+			videoId: '@'
+		},
 
 		template: '<div></div>',
 		// YouTube iframe API found at https://developers.google.com/youtube/iframe_api_reference
@@ -22,4 +28,4 @@ angular.module('YouTubeApp',[])
 	      };
 	    },
 	}
-}
+});
