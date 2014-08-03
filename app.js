@@ -22,13 +22,14 @@ angular.module('YouTubeApp',[])
 	      $window.onYouTubeIframeAPIReady = function() {
 	        player = new YT.Player(element.children()[0], {
 
+	        	// some of the parameters given by the API for use
 	        	playerParams:{
 	        		autoplay: 0,
 	        		html5: 1,
 	        		theme: 'light',
-	        		modesbranding: 0,
+	        		modesbranding: 0, //Remove YT logo
 	        		color: 'white',
-	        		iv_load_policy: 3,
+	        		iv_load_policy: 3, // Turn off anotations by default
 	        		showinfo: 1,
 	        		controls: 1,
 	        	},
@@ -38,6 +39,11 @@ angular.module('YouTubeApp',[])
 	          videoId: scope.videoid
 	        });
 	      };
+
+	      scope.$watch('videoid',function(newValue, oldValue){
+	      	// Watch for changes to videoid
+	      	newValue === oldValue ? return : player.cueVideoById(scope.videoid);
+	      })
 	    },
 	}
 });
