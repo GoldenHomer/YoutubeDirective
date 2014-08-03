@@ -21,9 +21,21 @@ angular.module('YouTubeApp',[])
 
 	      $window.onYouTubeIframeAPIReady = function() {
 	        player = new YT.Player(element.children()[0], {
-	          height: '390',
-	          width: '640',
-	          videoId: 'M7lc1UVf-VE'
+
+	        	playerParams:{
+	        		autoplay: 0,
+	        		html5: 1,
+	        		theme: 'light',
+	        		modesbranding: 0,
+	        		color: 'white',
+	        		iv_load_policy: 3,
+	        		showinfo: 1,
+	        		controls: 1,
+	        	},
+
+	          height: scope.height,
+	          width: scope.width,
+	          videoId: scope.videoid
 	        });
 	      };
 	    },
