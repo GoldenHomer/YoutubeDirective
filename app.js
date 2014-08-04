@@ -1,21 +1,28 @@
-angular.module('YouTubeApp',[])
+var ytApp = angular.module('YouTubeApp',[]);
 
-.constant('YTEvent',{
-	Stop: 0,
-	Play: 1,
-	Pause: 2,
+ytApp.constant('YTEvent',{
+	stop: 0,
+	play: 1,
+	pause: 2,
 });
 
-.controller('YouTubeCtrl', function($scope){
+ytApp.controller('YouTubeCtrl', function($scope){
 	// Controller is the parent
 	$scope.yt = {
 		width: 600,
 		height: 480,
-		videoid: 'M71c1UVf-VE',
+		videoid: 'praFGD51ih8',
 	};
+
+	$scope.YTEvent = YTEvent; 
+
+	$scope.sendControlEvent = function (ytEvent){
+		// Boardcast is used to send events from parent (controller) to child (directive)
+		this.$broadcast(ytEvent);
+	}
 });
 
-.directive('youtube', function($window){
+ytApp.directive('youtube', function($window){
 	// Directive is the child
 	return{
 		restrict: 'E', // Element directive
@@ -56,16 +63,21 @@ angular.module('YouTubeApp',[])
 	          videoId: scope.videoid
 	        });
 	      };
-	      scope.$watch('height', function(newValue, oldValue) {
-	      	newValue == oldValue ? return : player.setSize(scope.width, scope.height);
+
+	      scope.$watch('height + width', function(newValue, oldValue) {
+	      	// Apparently, height + width works (and that creates wonders!)
+	      	if(newValue == oldValue){
+	      		return
+	      	}
+	      	player.setSize(scope.width, scope.height);
 		  });
 
-		  scope.$watch('width', function(newValue, oldValue) {
-			newValue == oldValue ? return : player.setSize(scope.width, scope.height);
-		  });
 	      scope.$watch('videoid',function(newValue, oldValue){
 	      	// Watch for changes to videoid
-	      	newValue === oldValue ? return : player.cueVideoById(scope.videoid);
+	      	if(newValue === oldValue){
+	      		return;
+	      	}
+	      	player.cueVideoById(scope.videoid);
 	      });
 
 	      // Listen for events
