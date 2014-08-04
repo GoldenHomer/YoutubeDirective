@@ -3,14 +3,14 @@
 <head>
 	<title>YouTube Directive</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
-	<script src="/app.js"></script>
+	<script src="app.js"></script>
 </head>
 <body ng-app="YouTubeApp">
 	<div ng-controller="YouTubeCtrl">
-		<youtube width='{{yt.width}}' height='{{yt.height}}' videoid='yt.videoid'></youtube><br />
-		
-		Width:<input type="text" ng-model="yt.width" />
-		Height:<input type="text" ng-model="yt.height" />
+		<youtube width="" height="" videoid=""></youtube><br />
+
+		Width:<input type="text" ng-model="yt.width">
+		Height:<input type="text" ng-model="yt.height">
 		Videoid:<input type="text" ng-model="yt.videoid">
 
 		<button ng-click="sendControlEvent(YTEvent.play)">Play</button>

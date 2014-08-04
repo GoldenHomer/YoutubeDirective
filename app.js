@@ -19,7 +19,7 @@ ytApp.controller('YouTubeCtrl', function($scope){
 	$scope.sendControlEvent = function (ytEvent){
 		// Boardcast is used to send events from parent (controller) to child (directive)
 		this.$broadcast(ytEvent);
-	}
+	};
 });
 
 ytApp.directive('youtube', function($window){
@@ -66,18 +66,12 @@ ytApp.directive('youtube', function($window){
 
 	      scope.$watch('height + width', function(newValue, oldValue) {
 	      	// Apparently, height + width works (and that creates wonders!)
-	      	if(newValue == oldValue){
-	      		return
-	      	}
-	      	player.setSize(scope.width, scope.height);
+	      	newValue == oldValue ? return : player.setSize(scope.width, scope.height);
 		  });
 
 	      scope.$watch('videoid',function(newValue, oldValue){
 	      	// Watch for changes to videoid
-	      	if(newValue === oldValue){
-	      		return;
-	      	}
-	      	player.cueVideoById(scope.videoid);
+	      	newValue == oldValue ? return : player.cueVideoById(scope.videoid);
 	      });
 
 	      // Listen for events
