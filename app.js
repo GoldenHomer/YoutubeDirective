@@ -1,5 +1,22 @@
 angular.module('YouTubeApp',[])
+
+.constant('YTEvent',{
+	Stop: 0,
+	Play: 1,
+	Pause: 2,
+});
+
+.controller('YouTubeCtrl', function($scope){
+	// Controller is the parent
+	$scope.yt = {
+		width: 600,
+		height: 480,
+		videoid: 'M71c1UVf-VE',
+	};
+});
+
 .directive('youtube', function($window){
+	// Directive is the child
 	return{
 		restrict: 'E', // Element directive
 
@@ -10,7 +27,7 @@ angular.module('YouTubeApp',[])
 		},
 
 		template: '<div></div>',
-		// YouTube iframe API found at https://developers.google.com/youtube/iframe_api_reference
+				// YouTube iframe API found at https://developers.google.com/youtube/iframe_api_reference
 		link: function(scope, element, attrs) {
 	      var tag = document.createElement('script');
 	      tag.src = "https://www.youtube.com/iframe_api";
@@ -50,6 +67,20 @@ angular.module('YouTubeApp',[])
 	      	// Watch for changes to videoid
 	      	newValue === oldValue ? return : player.cueVideoById(scope.videoid);
 	      });
-	    },
-	}
+
+	      // Listen for events
+	      scope.$on(YT_event.STOP, function () {
+		    player.seekTo(0);
+		    player.stopVideo();
+		  });
+
+		  scope.$on(YT_event.PLAY, function () {
+		    player.playVideo();
+		  }); 
+
+		  scope.$on(YT_event.PAUSE, function () {
+		    player.pauseVideo();
+		  });
+	    }
+	};
 });
