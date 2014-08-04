@@ -39,11 +39,17 @@ angular.module('YouTubeApp',[])
 	          videoId: scope.videoid
 	        });
 	      };
+	      scope.$watch('height', function(newValue, oldValue) {
+	      	newValue == oldValue ? return : player.setSize(scope.width, scope.height);
+		  });
 
+		  scope.$watch('width', function(newValue, oldValue) {
+			newValue == oldValue ? return : player.setSize(scope.width, scope.height);
+		  });
 	      scope.$watch('videoid',function(newValue, oldValue){
 	      	// Watch for changes to videoid
 	      	newValue === oldValue ? return : player.cueVideoById(scope.videoid);
-	      })
+	      });
 	    },
 	}
 });
