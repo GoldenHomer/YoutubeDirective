@@ -1,12 +1,12 @@
-var ytApp = angular.module('YouTubeApp',[]);
+angular.module('YouTubeApp',[])
 
-ytApp.constant('YTEvent',{
+.constant('YTEvent',{
 	stop: 0,
 	play: 1,
 	pause: 2,
 });
 
-ytApp.controller('YouTubeCtrl', function($scope){
+.controller('YouTubeCtrl', function($scope){
 	// Controller is the parent
 	$scope.yt = {
 		width: 600,
@@ -22,7 +22,7 @@ ytApp.controller('YouTubeCtrl', function($scope){
 	};
 });
 
-ytApp.directive('youtube', function($window){
+.directive('youtube', function($window){
 	// Directive is the child
 	return{
 		restrict: 'E', // Element directive
