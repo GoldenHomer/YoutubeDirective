@@ -1,12 +1,12 @@
-var ytApp = angular.module('YouTubeApp',[]);
+var YTApp = angular.module('YouTubeApp',[]);
 
-ytApp.constant('YTEvent',{
+YTApp.constant('YTEvent',{
 	stop: 0,
 	play: 1,
 	pause: 2,
 });
 
-ytApp.controller('YouTubeCtrl', function($scope){
+YTApp.controller('YouTubeCtrl', function($scope, YTEvent){
 	// Controller is the parent
 	$scope.yt = {
 		width: 600,
@@ -22,7 +22,7 @@ ytApp.controller('YouTubeCtrl', function($scope){
 	};
 });
 
-ytApp.directive('youtube', function($window){
+YTApp.directive('youtube', function($window, YTEvent){
 	// Directive is the child
 	return{
 		restrict: 'E', // Element directive
@@ -31,11 +31,14 @@ ytApp.directive('youtube', function($window){
 			height: '@',
 			width: '@',
 			videoId: '@'
+			// @ used for one-way data binding. Since scope property 
+			//and attribute name are same, just @ will suffice.
 		},
 
 		template: '<div></div>',
+		
 				// YouTube iframe API found at https://developers.google.com/youtube/iframe_api_reference
-		link: function(scope, element, attrs) {
+		link: function(scope, element, attrs, $rootScope) {
 	      var tag = document.createElement('script');
 	      tag.src = "https://www.youtube.com/iframe_api";
 	      var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -64,27 +67,31 @@ ytApp.directive('youtube', function($window){
 	        });
 	      };
 
-	      scope.$watch('height + width', function(newValue, oldValue) {
-	      	// Apparently, height + width works (and that creates wonders!)
-	      	newValue == oldValue ? return : player.setSize(scope.width, scope.height);
-		  });
+	       scope.$watch('height + width', function(newValue, oldValue) {
+        if (newValue == oldValue) {
+          return;
+        }
+        player.setSize(scope.width, scope.height);
+      });
 
-	      scope.$watch('videoid',function(newValue, oldValue){
-	      	// Watch for changes to videoid
-	      	newValue == oldValue ? return : player.cueVideoById(scope.videoid);
-	      });
+	      scope.$watch('videoid', function(newValue, oldValue) {
+        if (newValue == oldValue) {
+          return;
+        }
+        player.cueVideoById(scope.videoid);
+      });
 
 	      // Listen for events
-	      scope.$on(YT_event.STOP, function () {
+	      scope.$on(YTEvent.stop, function () {
 		    player.seekTo(0);
 		    player.stopVideo();
 		  });
 
-		  scope.$on(YT_event.PLAY, function () {
+		  scope.$on(YTEvent.play, function () {
 		    player.playVideo();
 		  }); 
 
-		  scope.$on(YT_event.PAUSE, function () {
+		  scope.$on(YTEvent.pause, function () {
 		    player.pauseVideo();
 		  });
 	    }
