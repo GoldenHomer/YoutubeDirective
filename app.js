@@ -1,12 +1,22 @@
+<<<<<<< HEAD
 angular.module('YouTubeApp',[])
 
 .constant('YTEvent',{
+=======
+var YTApp = angular.module('YouTubeApp',[]);
+
+YTApp.constant('YTEvent',{
+>>>>>>> 4494807599a8d4f1e7789818be96d8f31e4c6342
 	stop: 0,
 	play: 1,
 	pause: 2,
 });
 
+<<<<<<< HEAD
 .controller('YouTubeController', function($scope, YTEvent){
+=======
+YTApp.controller('YouTubeCtrl', function($scope, YTEvent){
+>>>>>>> 4494807599a8d4f1e7789818be96d8f31e4c6342
 	// Controller is the parent
 	$scope.yt = {
 		width: 600,
@@ -22,7 +32,11 @@ angular.module('YouTubeApp',[])
 	};
 });
 
+<<<<<<< HEAD
 .directive('youtube', function($window){
+=======
+YTApp.directive('youtube', function($window, YTEvent){
+>>>>>>> 4494807599a8d4f1e7789818be96d8f31e4c6342
 	// Directive is the child
 	return{
 		restrict: 'E', // Element directive
@@ -31,9 +45,12 @@ angular.module('YouTubeApp',[])
 			height: '@',
 			width: '@',
 			videoId: '@'
+			// @ used for one-way data binding. Since scope property 
+			//and attribute name are same, just @ will suffice.
 		},
 
 		template: '<div></div>',
+		
 				// YouTube iframe API found at https://developers.google.com/youtube/iframe_api_reference
 		link: function(scope, element, attrs, $rootScope) {
 	      var tag = document.createElement('script');
@@ -64,6 +81,7 @@ angular.module('YouTubeApp',[])
 	        });
 	      };
 
+<<<<<<< HEAD
 	      scope.$watch('height + width', function(newValue, oldValue) {
 	      	// Apparently, height + width works (and that creates wonders!)
 	      	if(newValue == oldValue){
@@ -83,18 +101,33 @@ angular.module('YouTubeApp',[])
 	      	player.cueVideoById(scope.videoid);
 	      	
 	      });
+=======
+	       scope.$watch('height + width', function(newValue, oldValue) {
+        if (newValue == oldValue) {
+          return;
+        }
+        player.setSize(scope.width, scope.height);
+      });
+
+	      scope.$watch('videoid', function(newValue, oldValue) {
+        if (newValue == oldValue) {
+          return;
+        }
+        player.cueVideoById(scope.videoid);
+      });
+>>>>>>> 4494807599a8d4f1e7789818be96d8f31e4c6342
 
 	      // Listen for events
-	      scope.$on(YT_event.STOP, function () {
+	      scope.$on(YTEvent.stop, function () {
 		    player.seekTo(0);
 		    player.stopVideo();
 		  });
 
-		  scope.$on(YT_event.PLAY, function () {
+		  scope.$on(YTEvent.play, function () {
 		    player.playVideo();
 		  }); 
 
-		  scope.$on(YT_event.PAUSE, function () {
+		  scope.$on(YTEvent.pause, function () {
 		    player.pauseVideo();
 		  });
 	    }
