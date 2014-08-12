@@ -6,7 +6,7 @@ angular.module('YouTubeApp',[])
 	pause: 2,
 });
 
-.controller('YouTubeCtrl', function($scope){
+.controller('YouTubeController', function($scope, YTEvent){
 	// Controller is the parent
 	$scope.yt = {
 		width: 600,
@@ -16,9 +16,9 @@ angular.module('YouTubeApp',[])
 
 	$scope.YTEvent = YTEvent; 
 
-	$scope.sendControlEvent = function (ytEvent){
+	$scope.sendControlEvent = function (controlEvent){
 		// Boardcast is used to send events from parent (controller) to child (directive)
-		this.$broadcast(ytEvent);
+		this.$broadcast(controlEvent);
 	};
 });
 
@@ -35,7 +35,7 @@ angular.module('YouTubeApp',[])
 
 		template: '<div></div>',
 				// YouTube iframe API found at https://developers.google.com/youtube/iframe_api_reference
-		link: function(scope, element, attrs) {
+		link: function(scope, element, attrs, $rootScope) {
 	      var tag = document.createElement('script');
 	      tag.src = "https://www.youtube.com/iframe_api";
 	      var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -66,12 +66,22 @@ angular.module('YouTubeApp',[])
 
 	      scope.$watch('height + width', function(newValue, oldValue) {
 	      	// Apparently, height + width works (and that creates wonders!)
-	      	newValue == oldValue ? return : player.setSize(scope.width, scope.height);
+	      	if(newValue == oldValue){
+	      		return;
+	      	}
+
+	      	player.setSize(scope.width, scope.height);
+
 		  });
 
 	      scope.$watch('videoid',function(newValue, oldValue){
 	      	// Watch for changes to videoid
-	      	newValue == oldValue ? return : player.cueVideoById(scope.videoid);
+	      	if(newValue == oldValue){
+	      		return;
+	      	}
+
+	      	player.cueVideoById(scope.videoid);
+	      	
 	      });
 
 	      // Listen for events
